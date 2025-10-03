@@ -1,0 +1,12 @@
+Dear {{ payment.donor_name or 'Donor' }},
+
+Thank you very much for your generous donation to {{ ngo_name }}!
+
+Amount: ${{ payment.amount }} (USD)
+
+Your support helps {{ ngo_name }} achieve its mission. A full receipt is attached to this email (if applicable) or is available via your bank statement.
+
+Transaction ID: {{ payment.stripe_session_id }}
+
+Sincerely,
+The NGO Platform Team

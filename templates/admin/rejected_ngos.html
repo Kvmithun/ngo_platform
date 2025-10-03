@@ -1,0 +1,103 @@
+{% extends "base.html" %}
+
+{% block title %}Admin | {{ page_title }}{% endblock %}
+
+{% block content %}
+<div class="admin-grid-layout">
+
+    <div class="admin-sidebar">
+        <div class="sidebar-list-group">
+            <a href="{{ url_for('admin.list_pending_ngos') }}"
+               class="sidebar-item">
+                <i class="fas fa-clock"></i> Pending Applications
+            </a>
+            <a href="{{ url_for('admin.list_verified_ngos') }}" class="sidebar-item">
+                <i class="fas fa-check-circle"></i> Verified NGOs
+            </a>
+            <a href="{{ url_for('admin.list_rejected_ngos') }}"
+               class="sidebar-item active item-danger">
+                <i class="fas fa-times-circle"></i> Rejected Applications
+            </a>
+            <a href="{{ url_for('admin.logout') }}" class="sidebar-item item-danger">
+                <i class="fas fa-sign-out-alt"></i> Logout
+            </a>
+        </div>
+    </div>
+
+    <div class="admin-main-content">
+        <h2 class="section-title-admin">{{ page_title }}</h2>
+
+        {# Flashed Messages (Alerts) #}
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                {% for category, message in messages %}
+                    <div class="custom-alert-{{ category }}" role="alert">{{ message }}</div>
+                {% endfor %}
+            {% endif %}
+        {% endwith %}
+
+        {% if ngos %}
+            <div class="table-responsive-custom">
+                <table class="data-table-custom">
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Name</th>
+                            <th>Email</th>
+                            <th>Rejected On</th>
+                            <th>Documents</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for ngo in ngos %}
+                        <tr>
+                            <td>{{ ngo.id }}</td>
+                            <td>{{ ngo.name }}</td>
+                            <td>{{ ngo.contact_email }}</td>
+                            <td>{{ ngo.date_rejected.strftime('%Y-%m-%d') }}</td>
+                            <td>
+                                {% if ngo.reg_document_path %}
+                                    <a href="{{ url_for('static', filename=ngo.reg_document_path) }}" target="_blank" class="badge-document badge-primary-custom">View Reg Doc</a>
+                                {% else %}
+                                    <span class="badge-document badge-secondary-custom">No Reg Doc</span>
+                                {% endif %}
+                            </td>
+                            <td>
+                                <form method="POST" action="{{ url_for('admin.restore_ngo', ngo_id=ngo.id) }}" style="display:inline;">
+                                    <button type="submit" class="btn-action btn-restore"
+                                            onclick="return confirm('Confirm RESTORE of {{ ngo.name }} to pending status?');">Restore</button>
+                                </form>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        {% else %}
+            <div class="custom-alert-info-centered">
+                <h4 class="alert-heading-custom">Rejection Archive Empty</h4>
+                <p class="mb-0">There are no rejected applications currently in the archive.</p>
+            </div>
+        {% endif %}
+    </div>
+</div>
+
+<style>
+/* CSS ADDITIONS FOR THE RESTORE BUTTON */
+.btn-restore {
+    background-color: #F39C12; /* Warning Yellow/Orange */
+    color: white;
+    font-weight: 700;
+}
+.btn-restore:hover {
+    background-color: #E67E22;
+    transform: translateY(-1px);
+}
+.alert-heading-custom {
+    font-size: 1.5rem;
+    font-weight: 600;
+    margin-bottom: 5px;
+}
+</style>
+{% endblock %}

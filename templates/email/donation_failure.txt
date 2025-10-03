@@ -1,0 +1,9 @@
+Dear {{ payment.donor_name or 'Donor' }},
+
+We are writing to inform you that your donation attempt of ${{ payment.amount }} to {{ ngo_name }} could not be processed.
+
+**Reason for Failure: {{ reason or 'Payment was declined or cancelled by the gateway.' }}**
+
+Please try again with a different payment method or contact your bank if the issue persists.
+
+The NGO Platform Team

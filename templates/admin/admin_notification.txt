@@ -1,0 +1,13 @@
+Dear Administrator,
+
+A New NGO Application has been submitted for review:
+
+* Organization: {{ ngo.name }}
+* Type: {{ ngo.ngo_type }}
+* Contact Email: {{ ngo.contact_email }}
+* Submitted: {{ ngo.date_submitted.strftime('%Y-%m-%d %H:%M') }} (UTC)
+
+Please log in to the admin dashboard to review the application and supporting documents:
+{{ url_for('admin.list_pending_ngos', _external=True) }}
+
+Thank you for ensuring the integrity of the platform.

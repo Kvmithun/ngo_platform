@@ -1,0 +1,26 @@
+{% extends "base.html" %}
+
+{% block title %}Application Confirmation{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center mt-5">
+    <div class="col-md-8 col-lg-7">
+        <div class="card text-center shadow-lg p-5">
+            <div class="card-body">
+                <h1 class="card-title text-success mb-4">Application Submitted!</h1>
+                <p class="card-text fs-5">
+                    Your NGO application has been successfully received.
+                </p>
+                <p class="card-text fs-3 mb-4">
+                    **Your application is under review.**
+                </p>
+                <p class="text-muted">
+                    Our administrative team will review the details and verification documents. You will be notified via email within 5-7 business days regarding the status of your application.
+                </p>
+                <hr>
+                <a href="{{ url_for('home.index') }}" class="btn btn-primary mt-3">Return to Home</a>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

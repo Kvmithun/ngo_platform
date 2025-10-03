@@ -1,0 +1,288 @@
+{% extends "base.html" %}
+
+{% block title %}Admin | {{ page_title }}{% endblock %}
+
+{% block content %}
+
+<div class="admin-grid-layout">
+
+    <div class="admin-sidebar">
+        <div class="sidebar-list-group">
+            <a href="{{ url_for('admin.list_pending_ngos') }}"
+               class="sidebar-item {% if endpoint == 'admin.list_pending_ngos' %}active{% endif %}">
+                <i class="fas fa-clock"></i> Pending Applications (<span class="badge-count">{{ ngos|length }}</span>)
+            </a>
+            <a href="{{ url_for('admin.list_verified_ngos') }}" class="sidebar-item">
+                <i class="fas fa-check-circle"></i> Verified NGOs
+            </a>
+            <a href="{{ url_for('admin.list_rejected_ngos') }}" class="sidebar-item">
+                <i class="fas fa-times-circle"></i> Rejected Applications
+            </a>
+            <a href="{{ url_for('admin.logout') }}" class="sidebar-item item-danger">
+                <i class="fas fa-sign-out-alt"></i> Logout
+            </a>
+        </div>
+    </div>
+
+    <div class="admin-main-content">
+        <h2 class="section-title-admin">{{ page_title }}</h2>
+
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                {% for category, message in messages %}
+                    <div class="custom-alert-{{ category }}" role="alert">{{ message }}</div>
+                {% endfor %}
+            {% endif %}
+        {% endwith %}
+
+        {% if ngos %}
+            <table class="data-table-custom">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>NGO Name</th>
+                        <th>Email</th>
+                        <th>Type</th>
+                        <th>Documents</th>
+                        <th>Submitted</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for ngo in ngos %}
+                    <tr>
+                        <td>{{ ngo.id }}</td>
+                        <td>{{ ngo.name }}</td>
+                        <td>{{ ngo.contact_email }}</td>
+                        <td>{{ ngo.ngo_type }}</td>
+                        <td class="text-nowrap">
+                            {% if ngo.reg_document_path and ngo.reg_document_path != 'N/A (File Optional)' %}
+                                <a href="{{ url_for('static', filename=ngo.reg_document_path) }}" target="_blank" class="badge-document badge-primary-custom">Reg Doc</a>
+                            {% else %}
+                                <span class="badge-document badge-secondary-custom">No Reg Doc</span>
+                            {% endif %}
+
+                            {% if ngo.financial_report_path and ngo.financial_report_path != 'N/A (File Optional)' %}
+                                <a href="{{ url_for('static', filename=ngo.financial_report_path) }}" target="_blank" class="badge-document badge-secondary-custom">Fin Report</a>
+                            {% endif %}
+                        </td>
+                        <td>{{ ngo.date_submitted.strftime('%Y-%m-%d') }}</td>
+                        <td>
+                            <form method="POST" action="{{ url_for('admin.approve_ngo', ngo_id=ngo.id) }}" style="display:inline;">
+                                <button type="submit" class="btn-action btn-approve"
+                                        onclick="return confirm('Are you sure you want to approve {{ ngo.name }}?');">Approve</button>
+                            </form>
+                            <form method="POST" action="{{ url_for('admin.reject_ngo', ngo_id=ngo.id) }}" style="display:inline;">
+                                <button type="submit" class="btn-action btn-reject"
+                                        onclick="return confirm('Are you sure you want to reject {{ ngo.name }}?');">Reject</button>
+                            </form>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        {% else %}
+            <div class="custom-alert-info-centered">
+                No pending NGO applications at this time. Excellent work!
+            </div>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}
+
+<style>
+/* ADMIN GRID LAYOUT */
+.admin-grid-layout {
+    display: grid;
+    grid-template-columns: 280px 1fr;
+    gap: 40px;
+    padding-top: 20px;
+    width: 100%;
+}
+
+.section-title-admin {
+    font-size: 2rem;
+    font-weight: 700;
+    color: var(--color-text-dark);
+    margin-bottom: 30px;
+}
+
+/* SIDEBAR STYLING */
+.admin-sidebar {
+    position: sticky;
+    top: 50px;
+    height: fit-content;
+    padding: 15px;
+    background: rgba(255, 255, 255, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    border-radius: 12px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+}
+
+.sidebar-list-group {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.sidebar-item {
+    display: flex;
+    align-items: center;
+    padding: 12px 15px;
+    background-color: transparent;
+    color: var(--color-text-dark);
+    text-decoration: none;
+    border-radius: 8px;
+    font-size: 1rem;
+    font-weight: 500;
+    transition: background-color 0.2s, color 0.2s;
+}
+
+.sidebar-item i {
+    margin-right: 12px;
+    width: 20px;
+    color: var(--color-accent-teal);
+}
+
+.sidebar-item:hover {
+    background-color: rgba(0, 168, 150, 0.05);
+    color: var(--color-text-dark);
+}
+
+.sidebar-item.active {
+    background-color: var(--color-accent-teal);
+    color: white;
+    font-weight: 600;
+    box-shadow: 0 2px 8px rgba(0, 168, 150, 0.3);
+}
+
+.sidebar-item.active i {
+    color: white;
+}
+
+.item-danger {
+    color: #E74C3C !important;
+}
+
+.item-danger:hover {
+    background-color: rgba(231, 76, 60, 0.1);
+}
+
+.badge-count {
+    margin-left: auto;
+    background-color: var(--color-accent-green);
+    color: white;
+    padding: 4px 8px;
+    border-radius: 10px;
+    font-size: 0.8rem;
+    font-weight: 700;
+}
+
+/* TABLE STYLING */
+.data-table-custom {
+    width: 100%;
+    border-collapse: separate;
+    border-spacing: 0;
+    background-color: rgba(255, 255, 255, 0.05);
+    border-radius: 10px;
+    overflow: hidden;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+}
+
+.data-table-custom thead {
+    background-color: var(--color-text-dark);
+    color: white;
+}
+
+.data-table-custom th,
+.data-table-custom td {
+    padding: 12px 15px;
+    text-align: left;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+    font-size: 0.95rem;
+}
+
+.data-table-custom tbody tr:hover {
+    background-color: rgba(0, 0, 0, 0.03);
+}
+
+/* BADGES AND ACTIONS */
+.badge-document {
+    display: inline-block;
+    padding: 4px 8px;
+    border-radius: 4px;
+    margin-right: 5px;
+    font-size: 0.8rem;
+    text-decoration: none;
+    font-weight: 600;
+}
+
+.badge-primary-custom {
+    background-color: var(--color-accent-teal);
+    color: white;
+}
+
+.badge-secondary-custom {
+    background-color: var(--color-text-muted);
+    color: white;
+}
+
+.btn-action {
+    padding: 6px 12px;
+    border: none;
+    border-radius: 6px;
+    font-size: 0.85rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background-color 0.2s, transform 0.1s;
+}
+
+.btn-approve {
+    background-color: var(--color-accent-green);
+    color: white;
+    margin-right: 5px;
+}
+
+.btn-approve:hover {
+    background-color: #2D8C00;
+}
+
+.btn-reject {
+    background-color: #E74C3C;
+    color: white;
+}
+
+.btn-reject:hover {
+    background-color: #C0392B;
+}
+
+/* CUSTOM ALERTS */
+.custom-alert-info-centered {
+    padding: 20px;
+    background: rgba(0, 168, 150, 0.1);
+    border: 1px solid var(--color-accent-teal);
+    color: var(--color-text-dark);
+    border-radius: 8px;
+    text-align: center;
+    margin-top: 30px;
+    font-weight: 500;
+}
+
+/* Flashed Message Styles */
+.custom-alert-success {
+    padding: 15px;
+    background: rgba(56, 176, 0, 0.1);
+    border: 1px solid var(--color-accent-green);
+    color: var(--color-text-dark);
+    border-radius: 8px;
+    margin-bottom: 20px;
+}
+.custom-alert-danger {
+    padding: 15px;
+    background: rgba(231, 76, 60, 0.1);
+    border: 1px solid #E74C3C;
+    color: #E74C3C;
+    border-radius: 8px;
+    margin-bottom: 20px;
+}
+</style>

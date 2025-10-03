@@ -1,0 +1,77 @@
+{% extends "base.html" %}
+
+{% block title %}Find Verified NGOs{% endblock %}
+
+{% block content %}
+
+<div class="main-content-search-page">
+
+    <section class="intro-section">
+        <h1 class="main-title">
+            Discover Verified <span class="accent-text">Impact</span> 💡
+        </h1>
+        <p class="mission-statement">
+            Connect with highly vetted Non-Governmental Organizations making a tangible difference.
+        </p>
+
+        <div class="search-card-wrapper">
+            <div class="search-form-card">
+                <form method="POST" action="{{ url_for('search.index') }}" class="search-form-grid">
+                    {{ form.hidden_tag() }}
+
+                    <div class="input-group">
+                        <label for="{{ form.search_term.id }}" class="visually-hidden">Search Term</label>
+                        {{ form.search_term(class='custom-input', placeholder='Search by Organization Name or Key Focus...') }}
+                    </div>
+
+                    <div class="input-group">
+                        <label for="{{ form.category.id }}" class="visually-hidden">Category</label>
+                        {{ form.category(class='custom-select') }}
+                    </div>
+
+                    <div class="form-action-btn">
+                        <input type="submit" name="submit" value="Search" class="btn search-btn">
+                    </div>
+                </form>
+            </div>
+        </div>
+    </section>
+
+    <section class="featured-organizations-section">
+
+        <h2 class="section-title">
+            {% if query_executed %}
+                Search Results (<span class="accent-text">{{ results|length if results else '0' }}</span>)
+            {% else %}
+                Top Trusted Organizations
+            {% endif %}
+        </h2>
+
+        {% if results %}
+            <div class="ngo-cards-grid">
+                {% for ngo in results %}
+                    <div class="featured-ngo-card">
+                        <div class="card-content-body">
+                            <h3 class="ngo-card-title">
+                                {{ ngo.name }}
+                                <span class="badge badge-success-verified">Verified</span>
+                            </h3>
+                            <p class="card-subtitle">{{ ngo.ngo_type }}</p>
+                            </div>
+
+                        <a href="{{ url_for('donations.donate_ngo', ngo_id=ngo.id) }}" class="ngo-card-link-button">
+                            Invest in Impact →
+                        </a>
+                    </div>
+                {% endfor %}
+            </div>
+        {% elif query_executed %}
+            <div class="custom-alert-warning">
+                ⚠️ We couldn't find any organizations matching your search. Please check your spelling or category.
+            </div>
+        {% endif %}
+
+    </section>
+
+</div>
+{% endblock %}

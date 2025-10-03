@@ -1,0 +1,78 @@
+{% extends "base.html" %}
+
+{% block title %}Admin Login{% endblock %}
+
+{% block content %}
+<div class="main-content-search-page" style="align-items: center; justify-content: center; min-height: 70vh;">
+
+    <div class="custom-width-container" style="max-width: 450px; width: 90%; margin: 0 auto;">
+
+        <div class="featured-ngo-card login-card" style="padding: 40px; text-align: center; background: rgba(255, 255, 255, 0.15); border-radius: 15px; box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.2);">
+
+            <h2 class="card-title-custom" style="font-weight: 700; font-size: 2rem; color: var(--color-text-dark); margin-bottom: 30px;">Administrator Login</h2>
+
+            {% with messages = get_flashed_messages(with_categories=true) %}
+                {% if messages %}
+                    {% for category, message in messages %}
+                        <div class="custom-alert-warning" style="margin-bottom: 20px;" role="alert">{{ message }}</div>
+                    {% endfor %}
+                {% endif %}
+            {% endwith %}
+
+            <form method="POST" action="{{ url_for('admin.login') }}" style="display: flex; flex-direction: column; gap: 15px;">
+                {{ form.hidden_tag() }}
+
+                <div class="input-group">
+                    <label for="{{ form.email.id }}" class="input-label">{{ form.email.label }}</label>
+                    {{ form.email(class="custom-input", placeholder="Enter email") }}
+                    {% for error in form.email.errors %}
+                        <div class="validation-error">{{ error }}</div>
+                    {% endfor %}
+                </div>
+
+                <div class="input-group">
+                    <label for="{{ form.password.id }}" class="input-label">{{ form.password.label }}</label>
+                    {{ form.password(class="custom-input", placeholder="Enter password") }}
+                    {% for error in form.password.errors %}
+                        <div class="validation-error">{{ error }}</div>
+                    {% endfor %}
+                </div>
+
+                <div class="form-check-custom" style="display: flex; align-items: center; justify-content: flex-start; margin-bottom: 15px;">
+                    {{ form.remember_me(class="custom-checkbox", style="margin-right: 8px;") }}
+                    <label for="{{ form.remember_me.id }}" class="form-check-label" style="font-size: 0.9rem; color: var(--color-text-dark);">{{ form.remember_me.label }}</label>
+                </div>
+
+                {{ form.submit(class="btn submit-btn", style="background: var(--color-text-dark); color: white; border-radius: 8px; font-weight: 700; padding: 12px; margin-top: 10px; transition: background 0.3s;") }}
+            </form>
+
+            <p class="text-center-muted" style="text-align: center; margin-top: 20px; font-size: 0.8rem; color: var(--color-text-muted);">
+                Admin access is restricted.
+            </p>
+        </div>
+    </div>
+</div>
+
+<style>
+    .input-label { /* Style for form labels */
+        font-weight: 500;
+        color: var(--color-text-dark);
+        margin-bottom: 5px;
+        display: block;
+    }
+    .validation-error { /* Style for form errors */
+        color: #E74C3C;
+        font-size: 0.85rem;
+        margin-top: 5px;
+    }
+    .submit-btn { /* Base style for custom buttons */
+        padding: 12px;
+        border-radius: 8px;
+        font-weight: 600;
+        transition: transform 0.2s ease, box-shadow 0.3s ease;
+    }
+    .submit-btn:hover {
+        transform: translateY(-2px);
+    }
+</style>
+{% endblock %}

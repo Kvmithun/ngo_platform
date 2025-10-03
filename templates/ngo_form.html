@@ -1,0 +1,97 @@
+{% extends "base.html" %}
+
+{% block title %}NGO Application Form{% endblock %}
+
+{% block content %}
+<div class="main-content-search-page" style="align-items: center; justify-content: center; min-height: 80vh;">
+
+    <div class="custom-form-container" style="max-width: 900px; width: 90%;">
+
+        <div class="featured-ngo-card application-form-card" style="padding: 40px; margin: 20px 0;">
+
+            <h2 class="main-title" style="font-size: 2rem; margin-bottom: 5px; color: var(--color-text-dark);">
+                Official Application Form
+            </h2>
+
+            <p class="custom-alert-info-centered" style="margin-bottom: 25px; background: rgba(0, 168, 150, 0.1); border-color: rgba(0, 168, 150, 0.5);">
+                <strong>Authenticated:</strong> You are applying with the email: **{{ form.contact_email.data }}**
+            </p>
+
+            <form method="POST" action="{{ url_for('registration.ngo_form', token=token) }}" enctype="multipart/form-data">
+                {{ form.hidden_tag() }}
+
+                <div class="form-section" style="margin-bottom: 30px; padding: 15px 0;">
+                    <h3 style="font-size: 1.5rem; color: var(--color-accent-teal); margin-bottom: 20px;">Organization Details</h3>
+
+                    <div class="custom-form-row" style="display: flex; gap: 30px; margin-bottom: 15px;">
+                        <div class="input-group" style="flex: 1;">
+                            <label for="{{ form.name.id }}" class="input-label">{{ form.name.label }}</label>
+                            {{ form.name(class="custom-input", placeholder="Official NGO Name") }}
+                        </div>
+                        <div class="input-group" style="flex: 1;">
+                            <label for="{{ form.ngo_type.id }}" class="input-label">{{ form.ngo_type.label }}</label>
+                            {{ form.ngo_type(class="custom-select") }}
+                        </div>
+                    </div>
+
+                    <div class="input-group">
+                        <label for="{{ form.mission.id }}" class="input-label">{{ form.mission.label }}</label>
+                        {{ form.mission(class="custom-input", rows="5", style="height: auto; min-height: 120px;") }}
+                    </div>
+                </div>
+
+                <div class="form-section" style="border-top: 1px solid rgba(0,0,0,0.1); padding-top: 30px;">
+                    <h3 style="font-size: 1.5rem; color: var(--color-accent-teal); margin-bottom: 20px;">Contact & Verification</h3>
+
+                    <div class="custom-form-row" style="display: flex; gap: 30px; margin-bottom: 15px;">
+                        <div class="input-group" style="flex: 1;">
+                            <label for="{{ form.contact_email.id }}" class="input-label">{{ form.contact_email.label }}</label>
+                            {{ form.contact_email(class="custom-input", readonly=True, style="background: rgba(0,0,0,0.05); color: var(--color-text-muted);") }}
+                        </div>
+                        <div class="input-group" style="flex: 1;">
+                            <label for="{{ form.website.id }}" class="input-label">{{ form.website.label }}</label>
+                            {{ form.website(class="custom-input", placeholder="Official Website (Optional)") }}
+                        </div>
+                    </div>
+
+                    <h4 class="mt-4 mb-3" style="font-size: 1.2rem; font-weight: 600; margin-top: 30px; margin-bottom: 15px;">Required Documents for Verification</h4>
+
+                    <div class="input-group document-input" style="margin-bottom: 20px;">
+                        <label for="{{ form.registration_document.id }}" class="input-label">{{ form.registration_document.label }}</label>
+                        {{ form.registration_document(class="custom-file-input") }}
+                        <small class="form-text text-muted" style="color: var(--color-text-muted); font-size: 0.85rem; margin-top: 5px; display: block;">Upload your official government registration/tax-exempt status document (PDF recommended).</small>
+                    </div>
+
+                    <div class="input-group document-input" style="margin-bottom: 20px;">
+                        <label for="{{ form.financial_report.id }}" class="input-label">{{ form.financial_report.label }}</label>
+                        {{ form.financial_report(class="custom-file-input") }}
+                        <small class="form-text text-muted" style="color: var(--color-text-muted); font-size: 0.85rem; margin-top: 5px; display: block;">Upload your most recent annual financial report (PDF only).</small>
+                    </div>
+                </div>
+
+                {{ form.submit(class="btn submit-btn", style="background: var(--color-accent-green); border-radius: 8px; font-weight: 700; padding: 15px; margin-top: 25px;") }}
+
+            </form>
+        </div>
+    </div>
+</div>
+
+<style>
+/* Minimal File Input Style to match custom look */
+.custom-file-input {
+    display: block;
+    width: 100%;
+    padding: 12px 15px;
+    font-size: 1rem;
+    color: var(--color-text-dark);
+    background-color: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(0, 0, 0, 0.3);
+    border-radius: 8px;
+    transition: border-color 0.3s ease;
+}
+.custom-file-input:focus {
+    border-color: var(--color-accent-green);
+    box-shadow: 0 0 5px rgba(56, 176, 0, 0.3);
+}
+</style>
+{% endblock %}

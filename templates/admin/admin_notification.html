@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>New NGO Application Submitted</title>
+    <style>
+        body { font-family: 'Poppins', Helvetica, Arial, sans-serif; }
+    </style>
+</head>
+<body style="margin: 0; padding: 0; background-color: #f4f7f6; font-family: 'Poppins', Helvetica, Arial, sans-serif; color: #2C3E50;">
+
+    <table border="0" cellpadding="0" cellspacing="0" width="100%" style="table-layout: fixed; background-color: #f4f7f6;">
+        <tr>
+            <td align="center" style="padding: 30px 0;">
+
+                <table border="0" cellpadding="0" cellspacing="0" width="600" style="background-color: #ffffff; border-radius: 12px; box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1); border: 1px solid #e0e0e0;">
+
+                    <tr>
+                        <td style="padding: 20px 30px; background-color: #F8F9FB; border-top-left-radius: 12px; border-top-right-radius: 12px; border-bottom: 2px solid #00A896;">
+                            <h1 style="margin: 0; font-size: 24px; font-weight: 700; color: #2C3E50;">
+                                NGO <span style="color: #38B000;">Platform</span>
+                            </h1>
+                        </td>
+                    </tr>
+
+                    <tr>
+                        <td style="padding: 30px 30px 20px 30px;">
+                            <p style="margin-top: 0; margin-bottom: 20px; font-size: 16px; color: #2C3E50; font-weight: 600;">Dear Administrator,</p>
+
+                            <p style="margin-bottom: 20px; font-size: 18px; color: #00A896; font-weight: 700;">A New NGO Application has been submitted for review:</p>
+
+                            <table border="0" cellpadding="10" cellspacing="0" width="100%" style="border-collapse: collapse; margin-bottom: 30px; background-color: #F8F9FB; border-radius: 8px;">
+                                <tr>
+                                    <td width="30%" style="font-weight: 600; color: #6A7B8E; border-bottom: 1px solid #E0E7FF;">Organization:</td>
+                                    <td width="70%" style="color: #2C3E50; border-bottom: 1px solid #E0E7FF;">{{ ngo.name }}</td>
+                                </tr>
+                                <tr>
+                                    <td style="font-weight: 600; color: #6A7B8E; border-bottom: 1px solid #E0E7FF;">Type:</td>
+                                    <td style="color: #2C3E50; border-bottom: 1px solid #E0E7FF;">{{ ngo.ngo_type }}</td>
+                                </tr>
+                                <tr>
+                                    <td style="font-weight: 600; color: #6A7B8E; border-bottom: 1px solid #E0E7FF;">Contact Email:</td>
+                                    <td style="color: #2C3E50; border-bottom: 1px solid #E0E7FF;">{{ ngo.contact_email }}</td>
+                                </tr>
+                                <tr>
+                                    <td style="font-weight: 600; color: #6A7B8E;">Submitted:</td>
+                                    <td style="color: #2C3E50;">{{ ngo.date_submitted.strftime('%Y-%m-%d %H:%M') }} (UTC)</td>
+                                </tr>
+                            </table>
+
+                            <p style="margin-bottom: 25px; font-size: 15px; color: #2C3E50;">Please log in to the admin dashboard to review the application and supporting documents:</p>
+                        </td>
+                    </tr>
+
+                    <tr>
+                        <td align="center" style="padding: 0 30px 30px 30px;">
+                            <a href="{{ url_for('admin.list_pending_ngos', _external=True) }}"
+                               style="display: inline-block;
+                                       padding: 12px 25px;
+                                       color: #ffffff;
+                                       background-color: #38B000;
+                                       border-radius: 25px;
+                                       text-decoration: none;
+                                       font-weight: 600;
+                                       font-size: 16px;
+                                       box-shadow: 0 4px 10px rgba(56, 176, 0, 0.4);">
+                                Review Pending Applications &rarr;
+                            </a>
+                        </td>
+                    </tr>
+
+                    <tr>
+                        <td style="padding: 20px 30px; background-color: #F8F9FB; border-bottom-left-radius: 12px; border-bottom-right-radius: 12px; border-top: 1px solid #e0e0e0;">
+                            <p style="margin: 0; font-size: 12px; color: #6A7B8E; text-align: center;">
+                                Thank you for ensuring the integrity of the platform. | &copy; 2025 NGO Platform
+                            </p>
+                        </td>
+                    </tr>
+                </table>
+
+            </td>
+        </tr>
+    </table>
+
+</body>
+</html>

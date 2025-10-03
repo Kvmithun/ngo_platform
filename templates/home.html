@@ -1,0 +1,57 @@
+{% extends "base.html" %}
+
+{% block title %}Home | Verified NGOs{% endblock %}
+
+{% block content %}
+<header class="intro-section">
+    <h1 class="main-title" style="font-size: 3.5rem; line-height: 1.1;">
+        Find a <span class="accent-text">Cause</span> to Support Today 💡
+    </h1>
+    <p class="mission-statement" style="font-size: 1.2rem; max-width: 700px; margin-bottom: 30px;">
+        Connect with verified Non-Governmental Organizations making a real difference.
+    </p>
+    <a class="btn btn-register" href="{{ url_for('search.index') }}" style="padding: 12px 30px; border-radius: 30px; font-size: 1.1rem; box-shadow: 0 4px 10px rgba(0, 168, 150, 0.5);">
+        Start Searching
+    </a>
+    <div style="border-top: 1px solid rgba(0,0,0,0.1); margin-top: 40px;"></div>
+</header>
+
+<section class="featured-organizations-section" style="margin-top: 40px;">
+    <h2 class="section-title" style="font-size: 2rem; font-weight: 700; margin-bottom: 30px;">
+        Featured Organizations
+    </h2>
+
+    <div class="ngo-cards-grid" id="ngo-grid" style="grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));">
+
+        {% if ngos %}
+            {% for ngo in ngos %}
+                <div class="featured-ngo-card card-shadow-hover">
+                    <div class="card-content-body" style="display: flex; flex-direction: column; flex-grow: 1;">
+                        <h5 class="ngo-card-title">{{ ngo.name }}</h5>
+                        <p class="card-subtitle">{{ ngo.type }}</p>
+                        <p class="ngo-card-description" style="flex-grow: 1; margin-bottom: 15px; font-size: 0.9rem; color: var(--color-text-muted);">
+                            {{ ngo.mission|truncate(150, True, '...', True) }}
+                        </p>
+
+                        <div class="mt-3">
+                            <a href="{{ url_for('donations.donate_ngo', ngo_id=ngo.id) }}" class="submit-btn full-width-btn" style="background: var(--color-accent-green); box-shadow: 0 4px 10px rgba(56, 176, 0, 0.4); border-radius: 8px; font-weight: 600;">
+                                Donate to this Cause
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+        {% else %}
+            <div class="custom-alert-warning" style="grid-column: 1 / -1; margin-top: 20px;">
+                <h4 style="margin-bottom: 5px; font-weight: 600;">No Organizations Found</h4>
+                <p>It appears no verified organizations are currently featured. Check back later or try using the search function.</p>
+                <div style="height: 10px;"></div>
+                <a href="{{ url_for('registration.register') }}" class="btn btn-admin" style="padding: 8px 15px; border-color: var(--color-accent-teal); color: var(--color-accent-teal);">
+                    Register Your NGO
+                </a>
+            </div>
+        {% endif %}
+
+    </div>
+</section>
+{% endblock %}

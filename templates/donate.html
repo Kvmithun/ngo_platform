@@ -1,0 +1,122 @@
+{% extends "base.html" %}
+{# REMOVED: {% import "bootstrap_wtf.html" as wtf %} - Must use custom rendering #}
+
+{% block title %}Donate to {{ ngo.name }}{% endblock %}
+
+{% block content %}
+<div class="main-content-grid" style="align-items: center; justify-content: center; padding: 0 50px; margin: 0 auto;">
+
+    <section class="mission-section" style="padding-top: 0;">
+        <h1 class="main-title" style="color: var(--color-text-dark);">
+            Donate to <span class="accent-text">[{{ ngo.name }}]</span>
+        </h1>
+
+        <p class="mission-statement" style="font-style: italic; font-size: 1.2rem; color: var(--color-text-muted); max-width: 500px;">
+            *{{ ngo.mission|truncate(150) }}*
+        </p>
+    </section>
+
+    <div class="donation-card-container">
+
+        <div class="donation-card">
+
+            {% with messages = get_flashed_messages(with_categories=true) %}
+                {% if messages %}
+                    {% for category, message in messages %}
+                        <div class="custom-alert-warning" style="margin-bottom: 20px;" role="alert">{{ message }}</div>
+                    {% endfor %}
+                {% endif %}
+            {% endwith %}
+
+            <form method="POST" action="{{ url_for('donations.donate_ngo', ngo_id=ngo.id) }}" class="donation-form">
+
+                {{ form.hidden_tag() }}
+
+                <div class="custom-form-row">
+                    <div class="input-group">
+                        <label for="{{ form.donor_name.id }}">{{ form.donor_name.label }}</label>
+                        {{ form.donor_name(class="custom-input", placeholder=form.donor_name.label.text) }}
+                        {% for error in form.donor_name.errors %}
+                            <div class="validation-error">{{ error }}</div>
+                        {% endfor %}
+                    </div>
+                    <div class="input-group">
+                        <label for="{{ form.donor_email.id }}">{{ form.donor_email.label }}</label>
+                        {{ form.donor_email(class="custom-input", placeholder=form.donor_email.label.text) }}
+                        {% for error in form.donor_email.errors %}
+                            <div class="validation-error">{{ error }}</div>
+                        {% endfor %}
+                    </div>
+                </div>
+
+                <div class="input-group">
+                    <label for="{{ form.amount.id }}">{{ form.amount.label }}</label>
+                    {{ form.amount(class="custom-input", placeholder="$") }}
+                    {% for error in form.amount.errors %}
+                        <div class="validation-error">{{ error }}</div>
+                    {% endfor %}
+                    <small class="form-text text-muted" style="color: var(--color-text-muted); font-size: 0.9rem; margin-top: 5px; display: block;">Minimum donation is $1.00.</small>
+                </div>
+
+                {{ form.submit(class="submit-btn", value="Complete Donation") }}
+
+                <p class="text-center mt-3 small text-muted" style="text-align: center; margin-top: 15px; font-size: 0.8rem; color: var(--color-text-muted);">
+                    Payment processing secured by Stripe. You will be redirected to the Stripe checkout page.
+                </p>
+            </form>
+
+        </div>
+    </div>
+</div>
+
+<style>
+    /* NOTE: These styles must be placed in base.html CSS */
+    .main-content-grid {
+        display: grid;
+        grid-template-columns: 1fr 450px; /* 1fr for mission, 450px for card */
+        gap: 80px;
+        max-width: 1400px;
+        margin: 0 auto;
+        padding: 0 50px;
+        align-items: start;
+    }
+    .donation-card-container {
+        position: relative;
+        padding-top: 50px;
+    }
+    .donation-card {
+        padding: 40px;
+        background: rgba(255, 255, 255, 0.08);
+        backdrop-filter: blur(var(--glass-blur));
+        border: 1px solid rgba(255, 255, 255, 0.15);
+        border-radius: 15px;
+        box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+        border-top-left-radius: 50px;
+        border-bottom-right-radius: 50px;
+        transition: transform 0.5s ease;
+        z-index: 1;
+    }
+    .donation-form {
+        display: flex;
+        flex-direction: column;
+        gap: 20px;
+    }
+    .custom-form-row {
+        display: flex;
+        gap: 20px;
+    }
+    .custom-form-row .input-group {
+        flex: 1;
+    }
+    .input-group {
+        display: flex;
+        flex-direction: column;
+        gap: 5px;
+    }
+    .validation-error {
+        color: #E74C3C;
+        font-size: 0.85rem;
+        margin-top: 5px;
+    }
+</style>
+{% endblock %}
