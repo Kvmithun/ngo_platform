@@ -1,0 +1,37 @@
+# ---------------------------------------------------
+# Python Environment and Compilation
+# ---------------------------------------------------
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.Python
+.venv/
+venv/
+env/
+*.egg-info/
+build/
+dist/
+
+# ---------------------------------------------------
+# Database and Secrets
+# ---------------------------------------------------
+# Local SQLite database file (Render/Vercel use PostgreSQL)
+*.db
+*.sqlite
+/instance/
+
+# Flask/App Secrets (MUST NOT BE UPLOADED)
+.env
+.flaskenv
+*.key
+*.pem
+/app_secrets/
+
+# ---------------------------------------------------
+# Operating System & IDE Artifacts
+# ---------------------------------------------------
+.DS_Store
+.vscode/
+.idea/
+Thumbs.db
